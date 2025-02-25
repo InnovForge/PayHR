@@ -1,4 +1,4 @@
-# CMU-CS 445 RIS (2025S)
+# PayHR
 
 Dự án Express.js đơn giản sử dụng EJS làm công cụ template cùng với tính năng tự động tải lại trang khi phát triển.
 
@@ -20,8 +20,8 @@ Dự án Express.js đơn giản sử dụng EJS làm công cụ template cùng 
 1. **Clone dự án**:
 
    ```bash
-   git clone https://github.com/InnovForge/CMU-CS-445-RIS_2025S.git
-   cd CMU-CS-445-RIS_2025S
+   git clone https://github.com/InnovForge/PayHR.git
+   cd PayHr
    ```
 
 2. **Cài đặt các gói phụ thuộc**:
@@ -59,7 +59,7 @@ Dự án Express.js đơn giản sử dụng EJS làm công cụ template cùng 
 ## Cấu trúc dự án
 
 ```
-ejs-demo/
+PayHr/
 ├── views/              # Template EJS
 │   ├── layouts/        # Template layout
 │   ├── pages/          # Trang riêng lẻ
