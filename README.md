@@ -21,7 +21,7 @@ Dự án Express.js đơn giản sử dụng EJS làm công cụ template cùng 
 
    ```bash
    git clone https://github.com/InnovForge/PayHR.git
-   cd PayHr
+   cd PayHR
    ```
 
 2. **Cài đặt các gói phụ thuộc**:
