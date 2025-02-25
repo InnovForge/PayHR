@@ -1,0 +1,11 @@
+
+<h2 id="h">manage</h2>
+ <p class="lead">Đoạn văn này sẽ thay đổi khi nhấp vào nút bên dưới.</p>
+ <p class="lead h">Đoạn văn này sẽ thay đổi khi nhấp vào nút bên dưới.</p>
+  <button>Nhấp vào đây</button>
+<script>
+  $("button").click(function(){
+    $("p").text("Hello world!").animate({fontSize: "3em"}, 1000);
+    $(".h").text("Xin chào thế giới!").animate({fontSize: "3em", color: "red"}, 1000);
+    });
+</script>
