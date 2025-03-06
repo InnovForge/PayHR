@@ -49,8 +49,6 @@ wsClient.on('message', function message(data) {
   } else {
     wsClient.on('message', function message(data) {
       try {
-
-
         const jsonMessage = {
           type: 'new_data',
           data: data.data
