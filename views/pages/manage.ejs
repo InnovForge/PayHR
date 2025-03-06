@@ -1,11 +1,219 @@
+<script src="/socket.io/socket.io.js"></script>
+<div class="module-head">
+    <h3 id="h">manage</h3>
+</div>
 
-<h2 id="h">manage</h2>
- <p class="lead">Đoạn văn này sẽ thay đổi khi nhấp vào nút bên dưới.</p>
- <p class="lead h">Đoạn văn này sẽ thay đổi khi nhấp vào nút bên dưới.</p>
-  <button>Nhấp vào đây</button>
+<!-- <button onclick="getEmployees()">Nhấp vào đây</button> -->
+<!-- <h2>Danh sách nhân viên</h2> -->
+<div id="messages"></div>
+<div id="socket">connected</div>
+<div style="overflow-x:auto;">
+    <table cellpadding="0" cellspacing="0" border="0" id="tb" class="table table-bordered table-striped display"
+        width="100%">
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Employee Number</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Middle Initial</th>
+                <th>Address 1</th>
+                <th>Address 2</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>SSN</th>
+                <th>Driver's License</th>
+                <th>Marital Status</th>
+                <th>Gender</th>
+                <th>Shareholder Status</th>
+                <th>Benefit Plans</th>
+                <th>Ethnicity</th>
+                <th>Pay Rate</th>
+                <th>Pay Rate ID</th>
+                <th>Vacation Days</th>
+                <th>Paid to Date</th>
+                <th>Paid Last Year</th>
+            </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+            <% employees.forEach(emp=> { %>
+                <tr>
+                    <td>
+                        <%= emp.Employee_ID %>
+                    </td>
+                    <td>
+                        <%= emp.Employee_Number %>
+                    </td>
+                    <td>
+                        <%= emp.Last_Name %>
+                    </td>
+                    <td>
+                        <%= emp.First_Name %>
+                    </td>
+                    <td>
+                        <%= emp.Middle_Initial || '' %>
+                    </td>
+                    <td>
+                        <%= emp.Address1 %>
+                    </td>
+                    <td>
+                        <%= emp.Address2 %>
+                    </td>
+                    <td>
+                        <%= emp.City %>
+                    </td>
+                    <td>
+                        <%= emp.State %>
+                    </td>
+                    <td>
+                        <%= emp.Zip_Code || emp.Zip %>
+                    </td>
+                    <td>
+                        <%= emp.Email %>
+                    </td>
+                    <td>
+                        <%= emp.Phone_Number %>
+                    </td>
+                    <td>
+                        <%= emp.SSN || emp.Social_Security_Number %>
+                    </td>
+                    <td>
+                        <%= emp.Driver_License || emp.Drivers_License %>
+                    </td>
+                    <td>
+                        <%= emp.Marital_Status %>
+                    </td>
+                    <td>
+                        <%= emp.Gender %>
+                    </td>
+                    <td>
+                        <%= emp.Shareholder_Status %>
+                    </td>
+                    <td>
+                        <%= emp.Benefit_Plans %>
+                    </td>
+                    <td>
+                        <%= emp.Ethnicity %>
+                    </td>
+                    <td>
+                        <%= emp.Pay_Rate %>
+                    </td>
+                    <td>
+                        <%= emp.Pay_Rate_ID || emp.PayRates_id %>
+                    </td>
+                    <td>
+                        <%= emp.Vacation_Days %>
+                    </td>
+                    <td>
+                        <%= emp.Paid_To_Date %>
+                    </td>
+                    <td>
+                        <%= emp.Paid_Last_Year %>
+                    </td>
+
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+</div>
 <script>
-  $("button").click(function(){
-    $("p").text("Hello world!").animate({fontSize: "3em"}, 1000);
-    $(".h").text("Xin chào thế giới!").animate({fontSize: "3em", color: "red"}, 1000);
-    });
+
+    // async function getEmployees(url = 'http://localhost:8090/api/v1/mysql') {
+    //     let employees = await fetch(url);
+    //     employees = await employees.json();
+
+    //     const employeeTableBody = document.getElementById("employeeTableBody");
+
+    //     employees.forEach(emp => {
+    //         const row = document.createElement("tr");
+    //         row.innerHTML = `
+    //         <td>${emp.Employee_Number}</td>
+    //         <td>${emp.Last_Name}</td>
+    //         <td>${emp.First_Name}</td>
+    //         <td>${emp.SSN}</td>
+    //         <td>${emp.Pay_Rate}</td>
+    //         <td>${emp.Vacation_Days}</td>
+    //         <td>${emp.Paid_To_Date}</td>
+    //         <td>${emp.Paid_Last_Year}</td>
+    //     `;
+    //         employeeTableBody.appendChild(row);
+    //     });
+
+    //     console.log(employees);
+    // }
+    const sc = document.getElementById("socket");
+    const ws = new WebSocket("ws://localhost:8090");
+    // console.log("this is employeee: ",employees)
+
+    ws.onopen = function () {
+        //  console.log("Connected to WebSocket Spring Boot");
+        ws.send(JSON.stringify({ type: 'connect', message: 'Client connected' }));
+        sc.textContent = "WebSocket Connected!";
+        sc.style.color = "green"
+
+    };
+
+
+    ws.onmessage = function (event) {
+        console.log("Received message:", event.data);
+
+        try {
+            const parsedData = JSON.parse(event.data);
+
+            console.log(parsedData?.type);
+
+            if (parsedData?.type === "new_data") {
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error parsing received data:", error);
+        }
+    };
+
+    ws.onclose = function () {
+        console.log("WebSocket closed.");
+        sc.textContent = "WebSocket Disconnected!"
+        sc.style.color = "red"
+    };
+
+    // $("button").click(function () {
+    //     $("p").text("Hello world!").animate({ fontSize: "3em" }, 1000);
+    //     $(".h").text("Xin chào thế giới!").animate({ fontSize: "3em", color: "red" }, 1000);
+    // });
 </script>
+<style>
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse;
+    }
+
+    /* Zebra striping */
+    tr:nth-of-type(odd) {
+        background: #eee;
+    }
+
+    th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+
+    td,
+    th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
+</style>

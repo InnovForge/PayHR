@@ -59,7 +59,7 @@ Dự án Express.js đơn giản sử dụng EJS làm công cụ template cùng 
 ## Cấu trúc dự án
 
 ```
-PayHr/
+PayHR/
 ├── views/              # Template EJS
 │   ├── layouts/        # Template layout
 │   ├── pages/          # Trang riêng lẻ

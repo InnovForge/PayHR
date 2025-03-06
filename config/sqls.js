@@ -16,11 +16,24 @@ const sqlConfig = {
     trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
 };
+//  async function queryDatabase() {
+//   try {
+//     // Đảm bảo kết nối được mở
+//     await sql.connect(sqlConfig);
+//     const result = await sql.query('SELECT * FROM Personal');
+//     console.log(result.recordset);
+//   } catch (err) {
+//     console.error('Database error:', err);
+//   } finally {
+//     await sql.close(); // Đóng kết nối sau khi thực hiện xong
+//   }
+// }
+//
+// exports.queryDatabase = queryDatabase;
+const sqls = new sql.ConnectionPool(sqlConfig);
 
-const conn = new sql.ConnectionPool(sqlConfig);
-
-const poolPromise = sql
-conn.connect()  
+const poolPromise = sqls
+sqls.connect()  
   .then((pool) => {
     console.log('Connected to SQLS');
     return pool;
@@ -28,6 +41,6 @@ conn.connect()
   .catch((err) => console.error('Unable to connect to the database: ', err));
 
 module.exports = {
-  sqls: sql,
+  sqls: sqls,
   poolPromise,
 };
