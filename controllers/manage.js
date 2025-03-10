@@ -1,5 +1,5 @@
 const { mysql } = require('./../config/mysql');
-const {  sqls } = require('./../config/sqls');
+const { sqls } = require('./../config/sqls');
 
 exports.renderManage = async (req, res) => {
   try {
@@ -11,30 +11,30 @@ exports.renderManage = async (req, res) => {
 
     mysqlRows.forEach(mysqlEmp => {
       const sqlEmp = sqlResult.recordset.find(r => r.Employee_ID === mysqlEmp.idEmployee);
-      if (sqlEmp) {
+
+      if (sqlEmp) { 
         const mergedRecord = {
           Employee_ID: mysqlEmp.idEmployee || sqlEmp.Employee_ID,
           ...mysqlEmp,
+          ...sqlEmp
         };
 
         Object.keys(mergedRecord).forEach(field => {
-          const mysqlValue = mergedRecord[field];
+          const mysqlValue = mysqlEmp[field];
           const sqlValue = sqlEmp[field];
 
-          if (mysqlValue !== null && mysqlValue !== undefined && sqlValue !== null && sqlValue !== undefined) {
-            if (mysqlValue !== sqlValue) {
-              mergedRecord[field] = `${mysqlValue} (${sqlValue})`;
-            }
-          } else if (mysqlValue === null && sqlValue !== null) {
+          if (mysqlValue !== undefined && sqlValue !== undefined && mysqlValue !== sqlValue) {
+            mergedRecord[field] = `${mysqlValue} (${sqlValue})`;
+          } else if (mysqlValue === undefined && sqlValue !== undefined) {
             mergedRecord[field] = sqlValue;
-          } else if (sqlValue === null && mysqlValue !== null) {
+          } else if (sqlValue === undefined && mysqlValue !== undefined) {
             mergedRecord[field] = mysqlValue;
           }
         });
 
         mergedRecord.isNew = false;
         mergedData.push(mergedRecord);
-      } else {
+      } else { 
         mergedData.push({
           Employee_ID: mysqlEmp.idEmployee,
           ...mysqlEmp,
@@ -46,7 +46,7 @@ exports.renderManage = async (req, res) => {
     sqlResult.recordset.forEach(sqlEmp => {
       const mysqlEmp = mysqlRows.find(emp => emp.idEmployee === sqlEmp.Employee_ID);
 
-      if (!mysqlEmp) {
+      if (!mysqlEmp) { 
         mergedData.push({
           Employee_ID: sqlEmp.Employee_ID,
           ...sqlEmp,
