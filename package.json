@@ -5,6 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon --config nodemon.json server.js",
+    "seed:mysql": "node scripts/seed_mysql_faker.js",
     "setup": "node scripts/setup.js",
     "format": "prettier --write .",
     "clean": "rimraf ./node_modules/"
@@ -23,6 +24,7 @@
     "ws": "^8.18.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "connect-livereload": "^0.6.1",
     "livereload": "^0.9.3",
     "nodemon": "^3.1.9",
