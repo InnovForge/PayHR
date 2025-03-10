@@ -31,7 +31,7 @@ async function seedDatabase() {
     const employeeData = [];
     for (let i = 0; i < 10000; i++) {
       employeeData.push([
-        1000 + i, // Employee_Number
+        1 + i, // Employee_Number
         i + 1, // idEmployee
         faker.person.lastName(),
         faker.person.firstName(),
