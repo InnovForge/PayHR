@@ -16,6 +16,7 @@ const sqlConfig = {
     trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
 };
+const sqls = new sql.ConnectionPool(sqlConfig);
 //  async function queryDatabase() {
 //   try {
 //     // Đảm bảo kết nối được mở
@@ -30,10 +31,10 @@ const sqlConfig = {
 // }
 //
 // exports.queryDatabase = queryDatabase;
-const sqls = new sql.ConnectionPool(sqlConfig);
+
 
 const poolPromise = sqls
-sqls.connect()  
+sqls.connect()
   .then((pool) => {
     console.log('Connected to SQLS');
     return pool;

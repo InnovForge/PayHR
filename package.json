@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --config nodemon.json server.js",
     "seed:mysql": "node scripts/seed_mysql_faker.js",
+    "seed:sql": "node scripts/sql_c_sv.js",
     "setup": "node scripts/setup.js",
     "format": "prettier --write .",
     "clean": "rimraf ./node_modules/"
