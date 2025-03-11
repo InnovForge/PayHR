@@ -49,9 +49,24 @@ wsClient.on('message', function message(data) {
   } else {
     wsClient.on('message', function message(data) {
       try {
+        // console.log(data.toString())
+        const e2 = JSON.parse(data.toString());
+        const e = e2.data
+        const emp = {
+          Employee_ID: e.idEmployee,
+          Employee_Number: e.employeeNumber,
+          Last_Name: e.lastName,
+          First_Name: e.firstName,
+          SSN: e.ssn,
+          Pay_Rate: e.payRate,
+          Pay_Rate_ID: e.payRatesId,
+          Vacation_Days: e.vacationDays,
+          Paid_To_Date: e.paidToDate,
+          Paid_Last_Year: e.paidLastYear
+        }
         const jsonMessage = {
           type: 'new_data',
-          data: data.data
+          data: emp
         };
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {

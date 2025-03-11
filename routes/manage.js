@@ -4,4 +4,6 @@ const userController = require('../controllers/manage');
 
 router.get('/manage', userController.renderManage);
 
+router.get('/api/v1/employees', userController.gettAllEmployees);
+
 module.exports = router;

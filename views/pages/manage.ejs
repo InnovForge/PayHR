@@ -1,15 +1,24 @@
 <script src="/socket.io/socket.io.js"></script>
 <div class="module-head">
-    <h3 id="h">manage</h3>
+    <h3 id="h">Manage</h3>
 </div>
 
 <!-- <button onclick="getEmployees()">Nhấp vào đây</button> -->
 <!-- <h2>Danh sách nhân viên</h2> -->
 <div id="messages"></div>
-<div id="socket">connected</div>
-<div style="overflow-x:auto;">
-    <table cellpadding="0" cellspacing="0" border="0" id="tb" class="table table-bordered table-striped display"
-        width="100%">
+<div style="padding-block: 5px;display: flex; gap: 4px; align-items: center; justify-items: center;">
+    <span>WebSocket</span>
+    <span id="socket" class="label label-success">connected</span>
+</div>
+
+<!-- <div id="loading">Loading...</div> -->
+<div>
+    <input type="text" id="searchInput" placeholder="Tìm kiếm nhân viên..." />
+</div>
+
+<div style="overflow-x:auto" class="table-responsive">
+    <table cellpadding="0" cellspacing="0" border="0" id="tb" cellpadding="0" cellspacing="0" border="0"
+        class="table table-bordered display" width="100%">
         <thead>
             <tr>
                 <th>Employee ID</th>
@@ -38,8 +47,9 @@
                 <th>Paid Last Year</th>
             </tr>
         </thead>
-        <tbody id="employeeTableBody">
-            <% employees.forEach(emp=> { %>
+        <tbody id="employeeTableBody"></tbody>
+        <!-- <tbody id="employeeTableBody"> -->
+        <!-- <% employees.forEach(emp=> { %>
                 <tr>
                     <td>
                         <%= emp.Employee_ID %>
@@ -115,84 +125,200 @@
                     </td>
 
                 </tr>
-                <% }); %>
+                <% }); %> -->
         </tbody>
     </table>
+
 </div>
 <script>
+    const searchInput = document.getElementById('searchInput');
 
-    // async function getEmployees(url = 'http://localhost:8090/api/v1/mysql') {
-    //     let employees = await fetch(url);
-    //     employees = await employees.json();
+    searchInput.addEventListener('input', () => {
+        const keyword = searchInput.value.toLowerCase();
+        const tableRows = document.querySelectorAll('#employeeTableBody tr');
 
-    //     const employeeTableBody = document.getElementById("employeeTableBody");
+        tableRows.forEach(row => {
+            const cells = Array.from(row.getElementsByTagName('td'));
+            const rowText = cells.map(cell => cell.textContent.toLowerCase()).join(' ');
 
-    //     employees.forEach(emp => {
-    //         const row = document.createElement("tr");
-    //         row.innerHTML = `
-    //         <td>${emp.Employee_Number}</td>
-    //         <td>${emp.Last_Name}</td>
-    //         <td>${emp.First_Name}</td>
-    //         <td>${emp.SSN}</td>
-    //         <td>${emp.Pay_Rate}</td>
-    //         <td>${emp.Vacation_Days}</td>
-    //         <td>${emp.Paid_To_Date}</td>
-    //         <td>${emp.Paid_Last_Year}</td>
-    //     `;
-    //         employeeTableBody.appendChild(row);
-    //     });
+            if (rowText.includes(keyword)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
 
-    //     console.log(employees);
-    // }
-    const sc = document.getElementById("socket");
-    const ws = new WebSocket("ws://localhost:8090");
-    // console.log("this is employeee: ",employees)
+    let currentPage = 1;
+    let loading = false;
+    let hasMore = true;
+    const employeeMap = new Map();
 
-    ws.onopen = function () {
-        //  console.log("Connected to WebSocket Spring Boot");
-        ws.send(JSON.stringify({ type: 'connect', message: 'Client connected' }));
-        sc.textContent = "WebSocket Connected!";
-        sc.style.color = "green"
-
-    };
-
-
-    ws.onmessage = function (event) {
-        console.log("Received message:", event.data);
+    const loadEmployees = async (pageNumber = 1) => {
+        if (loading) return;
+        loading = true;
+        currentPage = pageNumber; // Cập nhật trang hiện tại
+        // document.getElementById('loading').style.display = 'block';
 
         try {
-            const parsedData = JSON.parse(event.data);
+            const response = await fetch(`/api/v1/employees?page=${currentPage}`);
+            const data = await response.json();
 
-            console.log(parsedData?.type);
-
-            if (parsedData?.type === "new_data") {
-                window.location.reload();
+            if (currentPage === 1) { // Xóa bảng cũ khi là trang đầu tiên
+                document.getElementById('employeeTableBody').innerHTML = '';
             }
+
+            data.employees.forEach(emp => {
+                employeeMap.set(emp.Employee_ID, emp);
+                renderEmployeeRow(emp);
+            });
+
+            hasMore = data.hasMore;
+            updatePagination(data.totalPages); // Cập nhật thanh phân trang
+
         } catch (error) {
-            console.error("Error parsing received data:", error);
+            console.error('Error loading employees:', error);
+        }
+
+        loading = false;
+        document.getElementById('loading').style.display = 'none';
+    };
+
+    const renderEmployeeRow = (emp, prepend = false) => {
+        const tableBody = document.getElementById('employeeTableBody');
+        let existingRow = document.querySelector(`#row-${emp.Employee_ID}`);
+        const rowData = `
+        <td>${emp.Employee_ID}</td>
+        <td>${emp.Employee_Number || ''}</td>
+        <td>${emp.Last_Name || ''}</td>
+        <td>${emp.First_Name || ''}</td>
+        <td>${emp.Middle_Initial || ''}</td>
+        <td>${emp.Address1 || ''}</td>
+        <td>${emp.Address2 || ''}</td>
+        <td>${emp.City || ''}</td>
+        <td>${emp.State || ''}</td>
+        <td>${emp.Zip_Code || emp.Zip || ''}</td>
+        <td>${emp.Email || ''}</td>
+        <td>${emp.Phone_Number || ''}</td>
+        <td>${emp.SSN || emp.Social_Security_Number || ''}</td>
+        <td>${emp.Driver_License || emp.Drivers_License || ''}</td>
+        <td>${emp.Marital_Status || ''}</td>
+        <td>${emp.Gender || ''}</td>
+        <td>${emp.Shareholder_Status || ''}</td>
+        <td>${emp.Benefit_Plans || ''}</td>
+        <td>${emp.Ethnicity || ''}</td>
+        <td>${emp.Pay_Rate || ''}</td>
+        <td>${emp.Pay_Rate_ID || emp.PayRates_id || ''}</td>
+        <td>${emp.Vacation_Days || ''}</td>
+        <td>${emp.Paid_To_Date || ''}</td>
+        <td>${emp.Paid_Last_Year || ''}</td>
+    `;
+
+        if (existingRow) {
+            existingRow.innerHTML = rowData;
+        } else {
+            const row = document.createElement('tr');
+            row.id = `row-${emp.Employee_ID}`;
+            row.innerHTML = rowData;
+            if (prepend) {
+
+                tableBody.prepend(row);
+            } else {
+
+                tableBody.appendChild(row);
+            }
         }
     };
 
-    ws.onclose = function () {
-        console.log("WebSocket closed.");
-        sc.textContent = "WebSocket Disconnected!"
-        sc.style.color = "red"
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+        loadEmployees();
 
-    // $("button").click(function () {
-    //     $("p").text("Hello world!").animate({ fontSize: "3em" }, 1000);
-    //     $(".h").text("Xin chào thế giới!").animate({ fontSize: "3em", color: "red" }, 1000);
-    // });
+        const tableContainer = document.querySelector('.table-responsive');
+
+        tableContainer.addEventListener('scroll', () => {
+            const scrollTop = tableContainer.scrollTop;
+            const scrollHeight = tableContainer.scrollHeight;
+            const containerHeight = tableContainer.clientHeight;
+
+            if (scrollTop + containerHeight >= scrollHeight - 100 && hasMore && !loading) {
+                loadEmployees(currentPage + 1); // Tải trang tiếp theo
+            }
+        });
+
+        const sc = document.getElementById("socket");
+        const ws = new WebSocket("ws://localhost:8090");
+        // console.log("this is employeee: ",employees)
+
+        ws.onopen = function () {
+            //  console.log("Connected to WebSocket Spring Boot");
+            ws.send(JSON.stringify({ type: 'connect', message: 'Client connected' }));
+            sc.textContent = "Connected!";
+            // sc.style.color = "green"
+
+        };
+
+
+        ws.onmessage = function (event) {
+            console.log("Received message:", event.data);
+
+            try {
+                const parsedData = JSON.parse(event.data);
+
+                console.log("Parsed data:", parsedData.data);
+
+                if (parsedData?.type === "new_data") {
+                    const newEmployee = parsedData?.data;
+
+                    if (newEmployee) {
+                        renderEmployeeRow(newEmployee, true);
+                        const newRow = document.querySelector(`#row-${newEmployee.Employee_ID}`);
+                        if (newRow) {
+                            newRow.classList.add('highlight');
+                            newRow.scrollIntoView({ behavior: "smooth", block: "center" });
+                            setTimeout(() => newRow.classList.remove('highlight'), 20000);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error parsing received data:", error);
+            }
+        };
+
+        ws.onclose = function () {
+            console.log("WebSocket closed.");
+            sc.textContent = "Disconnected!"
+            sc.classList.remove('label-success');
+            sc.classList.add('label-important');
+        };
+
+    });
+
+
 </script>
 <style>
     .table-responsive {
+        max-width: 100%;
+        max-height: 350px;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
     }
 
     table {
-        width: 100% !important;
+        width: 100%;
         border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
 
     /* Zebra striping */
@@ -215,5 +341,13 @@
 
     tr:nth-child(even) {
         background-color: #f2f2f2
+    }
+
+    body table tr.highlight,
+    body table tr.highlight:nth-of-type(odd),
+    body table tr.highlight:nth-of-type(even) {
+        background-color: yellow !important;
+        transition: background-color 2s;
+        color: black;
     }
 </style>
