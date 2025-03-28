@@ -6,12 +6,12 @@
 <!-- <button onclick="getEmployees()">Nhấp vào đây</button> -->
 <!-- <h2>Danh sách nhân viên</h2> -->
 <div id="messages"></div>
-<div style="padding-block: 5px;display: flex; gap: 4px; align-items: center; justify-items: center;">
+<!-- <div style="padding-block: 5px;display: flex; gap: 4px; align-items: center; justify-items: center;">
     <span>WebSocket</span>
     <span id="socket" class="label label-success">connected</span>
-</div>
+</div> -->
 
-<!-- <div id="loading">Loading...</div> -->
+<div id="loading">Loading...</div>
 <div>
     <input type="text" id="searchInput" placeholder="Tìm kiếm nhân viên..." />
 </div>
@@ -174,7 +174,7 @@
             });
 
             hasMore = data.hasMore;
-            updatePagination(data.totalPages); // Cập nhật thanh phân trang
+            // updatePagination(data.totalPages); // Cập nhật thanh phân trang
 
         } catch (error) {
             console.error('Error loading employees:', error);
@@ -245,14 +245,14 @@
             }
         });
 
-        const sc = document.getElementById("socket");
+        // const sc = document.getElementById("socket");
         const ws = new WebSocket("<%= wsUrl %>");
         // console.log("this is employeee: ",employees)
 
         ws.onopen = function () {
             //  console.log("Connected to WebSocket Spring Boot");
             ws.send(JSON.stringify({ type: 'connect', message: 'Client connected' }));
-            sc.textContent = "Connected!";
+            // sc.textContent = "Connected!";
             // sc.style.color = "green"
 
         };
@@ -284,12 +284,12 @@
             }
         };
 
-        ws.onclose = function () {
-            console.log("WebSocket closed.");
-            sc.textContent = "Disconnected!"
-            sc.classList.remove('label-success');
-            sc.classList.add('label-important');
-        };
+        // ws.onclose = function () {
+        //     console.log("WebSocket closed.");
+        //     sc.textContent = "Disconnected!"
+        //     sc.classList.remove('label-success');
+        //     sc.classList.add('label-important');
+        // };
 
     });
 
