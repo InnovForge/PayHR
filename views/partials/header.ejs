@@ -58,14 +58,19 @@
   .box {
     display: flex;
     gap: 10px;
+    align-items: center;
+
+    p {
+      margin: 0;
+    }
   }
 </style>
 <script>
-   const ws = new WebSocket("<%= wsUrl %>");
-ws.onopen = () => {
-  document.getElementById("ws").innerHTML = "Websocket: 🟢 Connected";
-};
-ws.close = () => {
-  document.getElementById("ws").innerHTML = "Websocket: 🔴 Not Connected";
-};
+  const ws = new WebSocket("<%= wsUrl %>");
+  ws.onopen = () => {
+    document.getElementById("ws").innerHTML = "Websocket: 🟢 Connected";
+  };
+  ws.close = () => {
+    document.getElementById("ws").innerHTML = "Websocket: 🔴 Not Connected";
+  };
 </script>
