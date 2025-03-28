@@ -1,3 +1,5 @@
+
+
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
@@ -7,6 +9,7 @@ const connectLiveReload = require('connect-livereload');
 const expressLayouts = require('express-ejs-layouts');
 const routes = require('./routes');
 const WebSocket = require('ws');
+const dbStatus = require('./middlewares/dbStatus');
 
 const app = express();
 const server = http.createServer(app);
@@ -24,15 +27,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
+app.use(dbStatus);
 app.set('layout', 'layouts/layout');
-
 app.use('/', routes);
 
 app.get('/', function (req, res) {
   res.redirect('/dashboard');
 });
-
-
 
 const wsClient = new WebSocket('ws://localhost:8080/springapp/socket');
 
@@ -90,19 +91,20 @@ const wss = new WebSocket.Server({ server });
 const clients = [];
 
 
-wss.on('connection', (ws) => {
-  console.log('New client connected');
+wss.on('connection', (ws,req) => {
+  const clientIP = req.socket.remoteAddress; // Địa chỉ IP
+  const connectionTime = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });; // Thời gian kết nối
+  console.log(`New Socket client connected: ${clientIP} at ${connectionTime}`);
   clients.push(ws);
-
-
-  // ws.on('message', (message) => {
-  //   console.log('Received from client: ', message.toString());
-  //   const response = { message: 'Hello from Node.js WebSocket server!', status: 'success' };
-  //   ws.send(JSON.stringify(response));
-  // });
 
   const welcomeMessage = { type: "msg", message: 'Welcome to WebSocket server', status: 'success' };
   ws.send(JSON.stringify(welcomeMessage));
+
+  ws.on('close', () => {
+    const disconnectionTime = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });; // Thời gian ngắt kết nối
+    console.log(`Socket client disconnected: ${clientIP} at ${disconnectionTime}`);
+    clients.splice(clients.indexOf(ws), 1);
+  });
 });
 
 app.post("/api/v1/partner/personal", async function (req, res) {
@@ -116,23 +118,7 @@ app.post("/api/v1/partner/personal", async function (req, res) {
   return res.json({ message: "success" });
 });
 
-// app.get('/api/v1/sqls', async function (req, res) {
-//   await conn.connect();
-//   const result = await conn.query('SELECT * FROM Personal');
-//   console.log(result.recordset);
-//   res.json(result.recordset);
-// });
-
-
-// app.get('/api/v1/mysql', async function (req, res) {
-//   const [rows] = await mysql.query('SELECT * FROM employee');
-//   res.json(rows);
-// });
-
-
-
 const PORT = process.env.PORT || 8090;
 server.listen(PORT, () => {
   console.log(`Server is listening on http://localhost:${PORT}`);
 });
-

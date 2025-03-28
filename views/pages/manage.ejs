@@ -246,7 +246,7 @@
         });
 
         const sc = document.getElementById("socket");
-        const ws = new WebSocket("ws://localhost:8090");
+        const ws = new WebSocket("<%= wsUrl %>");
         // console.log("this is employeee: ",employees)
 
         ws.onopen = function () {
