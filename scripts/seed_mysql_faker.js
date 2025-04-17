@@ -49,6 +49,8 @@ async function seedDatabase() {
     );
     console.log('✅ Inserted 10,000 employees');
   } catch (error) {
+
+    
     console.error('❌ Error inserting data:', error);
   } finally {
     connection.release();

@@ -1,0 +1,211 @@
+<%# author: ngtuonghy date: 2025-02-22 %>
+
+    <div class="content">
+        <div class="module">
+            <div class="module-head">
+                <h3>Create DB</h3>
+            </div>
+
+            <div class="module-body">
+                <form method="POST" action="/user/createdb" commandName="user" cssClass="form-horizontal row-fluid">
+                    <!--<form class="form-horizontal row-fluid">-->
+                    <div class="control-group">
+                        <label class="control-label" for="employeeID">Employee ID</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="employeeID" id="employeeID"
+                                value="<%= employee.employeeID || '' %>" placeholder="Employee ID" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="employeeNumber">Employee Number</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="employeeNumber" id="employeeNumber"
+                                value="<%= employee.employeeNumber || '' %>" placeholder="Employee Number" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="lastName">Last Name</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="lastName" id="lastName"
+                                value="<%= employee.lastName || '' %>" placeholder="Last Name" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="firstName">First Name</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="firstName" id="firstName"
+                                value="<%= employee.firstName || '' %>" placeholder="First Name" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="middleInitial">Middle Initial</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="middleInitial" id="middleInitial"
+                                value="<%= employee.middleInitial || '' %>" placeholder="Middle Initial" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="address1">Address 1</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="address1" id="address1"
+                                value="<%= employee.address1 || '' %>" placeholder="Address Line 1" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="address2">Address 2</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="address2" id="address2"
+                                value="<%= employee.address2 || '' %>" placeholder="Address Line 2" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="city">City</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="city" id="city" value="<%= employee.city || '' %>"
+                                placeholder="City" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="state">State</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="state" id="state" value="<%= employee.state || '' %>"
+                                placeholder="State" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="zipCode">Zip Code</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="zipCode" id="zipCode"
+                                value="<%= employee.zipCode || '' %>" placeholder="Zip Code" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="email">Email</label>
+                        <div class="controls">
+                            <input type="email" class="span8" name="email" id="email"
+                                value="<%= employee.email || '' %>" placeholder="Email" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="phoneNumber">Phone Number</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="phoneNumber" id="phoneNumber"
+                                value="<%= employee.phoneNumber || '' %>" placeholder="Phone Number" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="ssn">SSN</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="ssn" id="ssn" value="<%= employee.ssn || '' %>"
+                                placeholder="SSN" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="driversLicense">Driver's License</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="driversLicense" id="driversLicense"
+                                value="<%= employee.driversLicense || '' %>" placeholder="Driver's License" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="maritalStatus">Marital Status</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="maritalStatus" id="maritalStatus"
+                                value="<%= employee.maritalStatus || '' %>" placeholder="Marital Status" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="gender">Gender</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="gender" id="gender"
+                                value="<%= employee.gender || '' %>" placeholder="Gender" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="shareholderStatus">Shareholder Status</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="shareholderStatus" id="shareholderStatus"
+                                value="<%= employee.shareholderStatus || '' %>" placeholder="Shareholder Status" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="benefitPlans">Benefit Plans</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="benefitPlans" id="benefitPlans"
+                                value="<%= employee.benefitPlans || '' %>" placeholder="Benefit Plans" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="ethnicity">Ethnicity</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="ethnicity" id="ethnicity"
+                                value="<%= employee.ethnicity || '' %>" placeholder="Ethnicity" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="payRate">Pay Rate</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="payRate" id="payRate"
+                                value="<%= employee.payRate || '' %>" placeholder="Pay Rate" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="payRateID">Pay Rate ID</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="payRateID" id="payRateID"
+                                value="<%= employee.payRateID || '' %>" placeholder="Pay Rate ID" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="vacationDays">Vacation Days</label>
+                        <div class="controls">
+                            <input type="number" class="span8" name="vacationDays" id="vacationDays"
+                                value="<%= employee.vacationDays || '' %>" placeholder="Vacation Days" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="paidToDate">Paid to Date</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="paidToDate" id="paidToDate"
+                                value="<%= employee.paidToDate || '' %>" placeholder="Paid to Date" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="paidLastYear">Paid Last Year</label>
+                        <div class="controls">
+                            <input type="text" class="span8" name="paidLastYear" id="paidLastYear"
+                                value="<%= employee.paidLastYear || '' %>" placeholder="Paid Last Year" />
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
