@@ -1,3 +1,5 @@
+const { sendToKafka } = require('../kafka/producer');
+
 const { sqls } = require('./../config/sqls');
 const { mysql } = require('./../config/mysql');
 const sql = require('mssql');
@@ -81,6 +83,7 @@ exports.createDB = async (req, res) => {
       `);
 
     await mysqlTransaction.commit();
+    await sendToKafka('payroll-updates', mysqlData);
     await sqlTransaction.commit();
 
    return res.status(200).json({

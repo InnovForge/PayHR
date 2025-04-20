@@ -6,7 +6,7 @@ async function startConsumer() {
     await consumer.subscribe({ topics: ['payroll-updates', 'hr-updates'], });
 
     await consumer.run({
-        eachMessage: async ({ message }) => {
+        eachMessage: async ({ topic,message }) => {
             const data = JSON.parse(message.value.toString());
             switch (topic) {
                 case 'payroll-updates':
@@ -29,7 +29,7 @@ async function processPayrollData(data) {
 
 async function processHRData(data) {
 
-    console.log('Received employee data:', data);
+    console.log('Received HR data:', data);
 }
 
 

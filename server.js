@@ -1,5 +1,5 @@
-
-
+const startConsumer = require('./kafka/consumer');
+const { connectProducer } = require('./kafka/producer');
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
   res.redirect('/dashboard');
 });
 
-const wsClient = new WebSocket('ws://localhost:8080/springapp/socket');
+const wsClient = new WebSocket('ws://127.0.0.1:8080/springapp/socket');
 
 wsClient.on('open', function open() {
   console.log('Connected to Spring Boot WebSocket');
@@ -122,6 +122,10 @@ app.post("/api/v1/partner/personal", async function (req, res) {
 });
 
 const PORT = process.env.PORT || 8090;
-server.listen(PORT, () => {
+server.listen(PORT,async () => {
+  if(process.env.KAFKA_ENABLED){
+  await connectProducer();
+  await startConsumer();
+  }
   console.log(`Server is listening on http://localhost:${PORT}`);
 });
