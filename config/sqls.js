@@ -10,11 +10,14 @@ const sqlConfig = {
     max: 10,
     min: 0,
     idleTimeoutMillis: 30000,
+    
   },
   options: {
     encrypt: false, // for azure
     trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
+  connectionTimeout: 1000,
+  
 };
 const sqls = new sql.ConnectionPool(sqlConfig);
 //  async function queryDatabase() {
