@@ -214,34 +214,108 @@
     <script>
         document.getElementById("employeeForm").addEventListener("submit", function (e) {
             e.preventDefault();
-
+    
             const form = e.target;
             const formData = new FormData(form);
             const msgDiv = document.getElementById("formMsg");
-
             msgDiv.textContent = '';
-
+            msgDiv.style.color = "red";
+    
+            const data = Object.fromEntries(formData.entries());
+    
+            // Regex hỗ trợ kiểm tra định dạng
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const numericRegex = /^\d+$/;
+            const floatRegex = /^\d+(\.\d+)?$/;
+            const zipRegex = /^\d{5}$/;
+    
+            // Các trường bắt buộc nhập
+            const requiredFields = ['employeeID', 'firstName', 'lastName', 'email'];
+            for (const field of requiredFields) {
+                if (!data[field] || data[field].trim() === '') {
+                    msgDiv.textContent = `${field} là bắt buộc`;
+                    return;
+                }
+            }
+    
+            // Kiểm tra định dạng email
+            if (!emailRegex.test(data.email)) {
+                msgDiv.textContent = "Email không hợp lệ";
+                return;
+            }
+    
+            // Số điện thoại: chỉ chứa số
+            if (data.phoneNumber && !numericRegex.test(data.phoneNumber)) {
+                msgDiv.textContent = "Số điện thoại chỉ được chứa chữ số";
+                return;
+            }
+    
+            // Số CMND/SSN
+            if (data.ssn && !numericRegex.test(data.ssn)) {
+                msgDiv.textContent = "Số CMND/SSN phải là chữ số";
+                return;
+            }
+    
+            // Mã bưu điện (Zip code): 5 số
+            if (data.zipCode && !zipRegex.test(data.zipCode)) {
+                msgDiv.textContent = "Mã bưu điện phải gồm đúng 5 chữ số";
+                return;
+            }
+    
+            // Middle Initial: lớn hơn 1 ký tự
+            if (data.middleInitial && !data.middleInitial.length > 1) {
+                msgDiv.textContent = "Middle Initial chỉ được nhập 1 ký tự";
+                return;
+            }
+    
+            // Mức lương (Pay Rate)
+            if (data.payRate && !floatRegex.test(data.payRate)) {
+                msgDiv.textContent = "Mức lương phải là số";
+                return;
+            }
+    
+            // Số ngày nghỉ (Vacation Days)
+            if (data.vacationDays && (!numericRegex.test(data.vacationDays) || parseInt(data.vacationDays) < 0)) {
+                msgDiv.textContent = "Số ngày nghỉ phải là số không âm";
+                return;
+            }
+    
+            // Đã trả đến hiện tại
+            if (data.paidToDate && !floatRegex.test(data.paidToDate)) {
+                msgDiv.textContent = "Số tiền đã trả phải là số";
+                return;
+            }
+    
+            // Đã trả năm trước
+            if (data.paidLastYear && !floatRegex.test(data.paidLastYear)) {
+                msgDiv.textContent = "Số tiền đã trả năm trước phải là số";
+                return;
+            }
+    
+            // Gửi dữ liệu nếu hợp lệ
             fetch(form.action, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(Object.fromEntries(formData.entries())),
+                body: JSON.stringify(data),
             })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        msgDiv.textContent = "Created susscess"
-                        msgDiv.style.color = "green"
-                    } else {
-                        msgDiv.textContent = result.message || "ERR";
-                    }
-                })
-                .catch(error => {
-                    msgDiv.textContent = "Cannot connect to server";
-                    msgDiv.style.color = "red";
-                    console.error("Error:", error);
-                });
-
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    msgDiv.textContent = "Tạo mới nhân viên thành công";
+                    msgDiv.style.color = "green";
+                    form.reset(); // Reset form sau khi tạo thành công
+                } else {
+                    msgDiv.textContent = result.message || "Đã xảy ra lỗi";
+                }
+            })
+            .catch(error => {
+                msgDiv.textContent = "Không thể kết nối đến máy chủ";
+                console.error("Lỗi:", error);
+            });
         });
     </script>
+    
+    
+    
