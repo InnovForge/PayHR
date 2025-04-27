@@ -279,6 +279,18 @@
                         }
                     }
                 }
+                if (parsedData?.type === "delete_data") {
+                    const deletedEmployee = parsedData?.data;
+                    if (deletedEmployee) {
+                        const rowToDelete = document.querySelector(`#row-${deletedEmployee.Employee_ID}`);
+                        if (rowToDelete) {
+                            rowToDelete.classList.add('highlight-delete');
+                            setTimeout(() => {
+                                rowToDelete.remove();
+                            }, 2000);
+                        }
+                    }
+                }
             } catch (error) {
                 console.error("Error parsing received data:", error);
             }
@@ -347,6 +359,13 @@
     body table tr.highlight:nth-of-type(odd),
     body table tr.highlight:nth-of-type(even) {
         background-color: yellow !important;
+        transition: background-color 2s;
+        color: black;
+    }
+    body table tr.highlight-delete,
+    body table tr.highlight-delete:nth-of-type(odd),
+    body table tr.highlight-delete:nth-of-type(even) {
+        background-color: red !important;
         transition: background-color 2s;
         color: black;
     }
