@@ -1,10 +1,10 @@
 const kafka = require('../config/kafka');
 const producer = kafka.producer();
 
-async function sendToKafka(topic, data) {
+async function sendToKafka(topic, data, employeeId) {
   await producer.send({
     topic,
-    messages: [{ value: JSON.stringify(data) }],
+    messages: [{ value: JSON.stringify(data) ,  employeeId }],
   });
 }
 

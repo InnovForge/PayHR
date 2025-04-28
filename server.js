@@ -1,4 +1,5 @@
 const startConsumer = require('./kafka/consumer');
+const {startConsumerDb} = require('./kafka/consumer-db');
 const { connectProducer } = require('./kafka/producer');
 require('dotenv').config();
 const express = require('express');
@@ -128,6 +129,7 @@ server.listen(PORT,async () => {
   if(process.env.KAFKA_ENABLED){
   await connectProducer();
   await startConsumer();
+   await startConsumerDb();
   }
   console.log(`Server is listening on http://localhost:${PORT}`);
 });

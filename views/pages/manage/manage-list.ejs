@@ -45,6 +45,7 @@
                 <th>Vacation Days</th>
                 <th>Paid to Date</th>
                 <th>Paid Last Year</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="employeeTableBody"></tbody>
@@ -212,6 +213,10 @@
         <td>${emp.Vacation_Days || ''}</td>
         <td>${emp.Paid_To_Date || ''}</td>
         <td>${emp.Paid_Last_Year || ''}</td>
+        <td>
+            <button onclick="window.location.href = '/manage/e/${emp.Employee_ID}'">Update</button>
+            <button style="color:red" onclick="deleteEmployee('${emp.Employee_ID}')">Delete</button>
+        </td>
     `;
 
         if (existingRow) {
@@ -304,6 +309,57 @@
         // };
 
     });
+
+function updateEmployee(employeeId) {
+    const emp = employeeMap.get(employeeId);
+    if (!emp) {
+        alert('Không tìm thấy nhân viên!');
+        return;
+    }
+
+    const newFirstName = prompt('Nhập First Name mới:', emp.First_Name);
+    if (newFirstName !== null) {
+        emp.First_Name = newFirstName;
+        // Gửi yêu cầu cập nhật lên server
+        fetch(`/api/v1/employees/${employeeId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(emp)
+        })
+        .then(response => response.json())
+        .then(updatedEmp => {
+            employeeMap.set(updatedEmp.Employee_ID, updatedEmp);
+            renderEmployeeRow(updatedEmp);
+            alert('Cập nhật thành công!');
+        })
+        .catch(err => {
+            console.error('Error updating employee:', err);
+            alert('Cập nhật thất bại.');
+        });
+    }
+}
+
+function deleteEmployee(employeeId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) return;
+
+    fetch(`/api/v1/employees/${employeeId}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            const row = document.querySelector(`#row-${employeeId}`);
+            if (row) row.remove();
+            employeeMap.delete(employeeId);
+            alert(`Delete successful! ${employeeId}`);
+        } else {
+            alert('Xóa thất bại.');
+        }
+    })
+    .catch(err => {
+        console.error('Error deleting employee:', err);
+        alert('Xóa thất bại.');
+    });
+}
 
 
 </script>

@@ -1,0 +1,198 @@
+<body>
+
+    <h2>Edit Employee Information - Employee ID: <%= mysql.idEmployee || (sql && sql[0] ? sql[0].Employee_ID : '' ) %>
+    </h2>
+    <form id="updateForm"
+        action="/api/v1/employees/<%= mysql.idEmployee || (sql && sql[0] ? sql[0].Employee_ID : '') %>" method="POST">
+
+        <div class="box-form">
+
+            <% if (mysql) { %>
+                <div class="box-mysql">
+                    <h3>MySQL Information</h3>
+                    <div>
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" value="<%= mysql.First_Name %>">
+                    </div>
+                    <div>
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" value="<%= mysql.Last_Name %>">
+                    </div>
+                    <div>
+                        <label for="ssn">SSN</label>
+                        <input type="text" id="ssn" name="ssn" value="<%= mysql.SSN %>">
+                    </div>
+                    <div>
+                        <label for="payRate">Pay Rate</label>
+                        <input type="text" id="payRate" name="payRate" value="<%= mysql.Pay_Rate %>">
+                    </div>
+                    <div>
+                        <label for="payRatesId">Pay Rates ID</label>
+                        <input type="text" id="payRatesId" name="payRatesId" value="<%= mysql.PayRates_id %>">
+                    </div>
+                    <div>
+                        <label for="vacationDays">Vacation Days</label>
+                        <input type="text" id="vacationDays" name="vacationDays" value="<%= mysql.Vacation_Days %>">
+                    </div>
+                    <div>
+                        <label for="paidToDate">Paid To Date</label>
+                        <input type="text" id="paidToDate" name="paidToDate" value="<%= mysql.Paid_To_Date %>">
+                    </div>
+                    <div>
+                        <label for="paidLastYear">Paid Last Year</label>
+                        <input type="text" id="paidLastYear" name="paidLastYear" value="<%= mysql.Paid_Last_Year %>">
+                    </div>
+                </div>
+                <% } %>
+
+                    <% if (sql) { %>
+                        <div class="box-sql">
+                            <h3>SQL Server Information</h3>
+                            <div>
+                                <label for="firstNameSql">First Name</label>
+                                <input type="text" id="firstNameSql" name="firstNameSql" value="<%= sql.First_Name %>">
+                            </div>
+                            <div>
+                                <label for="lastNameSql">Last Name</label>
+                                <input type="text" id="lastNameSql" name="lastNameSql" value="<%= sql.Last_Name %>">
+                            </div>
+                            <div>
+                                <label for="middleInitial">Middle Initial</label>
+                                <input type="text" id="middleInitial" name="middleInitial"
+                                    value="<%= sql.Middle_Initial %>">
+                            </div>
+                            <div>
+                                <label for="address">Address</label>
+                                <input type="text" id="address" name="address" value="<%= sql.Address1 %>">
+                            </div>
+                            <div>
+                                <label for="address2">Address Line 2</label>
+                                <input type="text" id="address2" name="address2" value="<%= sql.Address2 %>">
+                            </div>
+                            <div>
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" value="<%= sql.City %>">
+                            </div>
+                            <div>
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" value="<%= sql.State %>">
+                            </div>
+                            <div>
+                                <label for="zip">Zip Code</label>
+                                <input type="text" id="zip" name="zip" value="<%= sql.Zip %>">
+                            </div>
+                            <div>
+                                <label for="email">Email</label>
+                                <input type="text" id="email" name="email" value="<%= sql.Email %>">
+                            </div>
+                            <div>
+                                <label for="phone">Phone Number</label>
+                                <input type="text" id="phone" name="phone" value="<%= sql.Phone_Number %>">
+                            </div>
+                            <div>
+                                <label for="socialSecurityNumber">Social Security Number</label>
+                                <input type="text" id="socialSecurityNumber" name="socialSecurityNumber"
+                                    value="<%= sql.Social_Security_Number %>">
+                            </div>
+                            <div>
+                                <label for="driversLicense">Drivers License</label>
+                                <input type="text" id="driversLicense" name="driversLicense"
+                                    value="<%= sql.Drivers_License %>">
+                            </div>
+                            <div>
+                                <label for="maritalStatus">Marital Status</label>
+                                <input type="text" id="maritalStatus" name="maritalStatus"
+                                    value="<%= sql.Marital_Status %>">
+                            </div>
+                            <div>
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender">
+                                    <option value="1" <%=sql.Gender ? 'selected' : '' %>>Male</option>
+                                    <option value="0" <%=!sql.Gender ? 'selected' : '' %>>Female</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex;justify-items: center; gap: 10px;">
+                                <label for="shareholderStatus">Shareholder Status</label>
+
+                                <input type="hidden" name="shareholderStatus" value="0">
+
+                                <input type="checkbox" id="shareholderStatus" name="shareholderStatus" value="1"
+                                    <%=sql.Shareholder_Status ? 'checked' : '' %>>
+                            </div>
+                            
+                            <div>
+                                <label for="benefitPlans">Benefit Plans</label>
+                                <input type="text" id="benefitPlans" name="benefitPlans"
+                                    value="<%= sql.Benefit_Plans %>">
+                            </div>
+                            <div>
+                                <label for="ethnicity">Ethnicity</label>
+                                <input type="text" id="ethnicity" name="ethnicity" value="<%= sql.Ethnicity %>">
+                            </div>
+
+                        </div>
+                        <% } %>
+        </div>
+        <div id="msg-form"></div>
+        <button style="width: 100%;" type="submit">Update</button>
+    </form>
+
+</body>
+<style>
+    .box-form {
+        display: flex;
+        align-items: st;
+        justify-content: space-around;
+    }
+
+    .box-mysql,
+    .box-sql {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<script>
+    document.getElementById("updateForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const msgDiv = document.getElementById("msg-form");
+
+        data.source = [];
+    <% if (mysql) { %>
+            data.source.push("mysql");
+    <% } %>
+    <% if (sql) { %>
+            data.source.push("sql");
+    <% } %>
+
+            msgDiv.textContent = '';
+        msgDiv.style.color = "red";
+
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    msgDiv.textContent = "Update successful";
+                    msgDiv.style.color = "green";
+                    // form.reset();
+                } else {
+                    msgDiv.textContent = result.message || "Update failed";
+                }
+            })
+            .catch(error => {
+                msgDiv.textContent = "Không thể kết nối đến máy chủ";
+                console.error("Lỗi:", error);
+            });
+    });
+
+</script>

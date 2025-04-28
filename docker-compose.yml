@@ -24,40 +24,40 @@ services:
   #     DYNAMIC_CONFIG_ENABLED: true
   #     KAFKA_CLUSTERS_0_NAME: wizard_test
   #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
-  payroll_mysql:
-    image: mysql:5.6
-    container_name: payroll_mysql
-    cap_add:
-      - SYS_NICE
-    restart: always
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysqlseverdata:/var/lib/mysql
+  # payroll_mysql:
+  #   image: mysql:5.6
+  #   container_name: payroll_mysql
+  #   cap_add:
+  #     - SYS_NICE
+  #   restart: always
+  #   environment:
+  #     - MYSQL_DATABASE=${MYSQL_DATABASE}
+  #     - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  #     - MYSQL_USER=${MYSQL_USER}
+  #     - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+  #   ports:
+  #     - "3307:3306"
+  #   volumes:
+  #     - mysqlseverdata:/var/lib/mysql
       # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     # env_file:
       # - path: .env
         # required: false # default 
       # - path: .env.development
         # required: false
-  hr_sql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: hr_sql
-    cap_add:
-      - SYS_NICE
-    restart: always
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=@team1sys
-    ports:
-      - "1435:1433"
-    volumes:
-      - sqlserverdata:/var/opt/mssql
+  # hr_sql:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   container_name: hr_sql
+  #   cap_add:
+  #     - SYS_NICE
+  #   restart: always
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - MSSQL_SA_PASSWORD=@team1sys
+  #   ports:
+  #     - "1435:1433"
+  #   volumes:
+  #     - sqlserverdata:/var/opt/mssql
       # - mysql_volume:/var/lib/mysql
     # env_file:
 volumes:
