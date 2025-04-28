@@ -268,12 +268,9 @@
 
             try {
                 const parsedData = JSON.parse(event.data);
-
                 console.log("Parsed data:", parsedData.data);
-
                 if (parsedData?.type === "new_data") {
                     const newEmployee = parsedData?.data;
-
                     if (newEmployee) {
                         renderEmployeeRow(newEmployee, true);
                         const newRow = document.querySelector(`#row-${newEmployee.Employee_ID}`);
@@ -281,6 +278,19 @@
                             newRow.classList.add('highlight');
                             newRow.scrollIntoView({ behavior: "smooth", block: "center" });
                             setTimeout(() => newRow.classList.remove('highlight'), 20000);
+                        }
+                    }
+                }
+                if(parsedData?.type === "update_data") {
+                    const updatedEmployee = parsedData?.data;
+                    if (updatedEmployee) {
+                        employeeMap.set(updatedEmployee.Employee_ID, updatedEmployee);
+                        renderEmployeeRow(updatedEmployee);
+                        const updatedRow = document.querySelector(`#row-${updatedEmployee.Employee_ID}`);
+                        if (updatedRow) {
+                            updatedRow.classList.add('highlight-update');
+                            updatedRow.scrollIntoView({ behavior: "smooth", block: "center" });
+                            setTimeout(() => updatedRow.classList.remove('highlight-update'), 20000);
                         }
                     }
                 }
@@ -292,7 +302,7 @@
                             rowToDelete.classList.add('highlight-delete');
                             setTimeout(() => {
                                 rowToDelete.remove();
-                            }, 2000);
+                            }, 5000);
                         }
                     }
                 }
@@ -415,6 +425,13 @@ function deleteEmployee(employeeId) {
     body table tr.highlight:nth-of-type(odd),
     body table tr.highlight:nth-of-type(even) {
         background-color: yellow !important;
+        transition: background-color 2s;
+        color: black;
+    }
+    body table tr.highlight-update,
+    body table tr.highlight-update:nth-of-type(odd),
+    body table tr.highlight-delete {
+        background-color: #81E7AF !important;
         transition: background-color 2s;
         color: black;
     }
