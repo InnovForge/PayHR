@@ -35,7 +35,7 @@ async function insertFakePersonalData() {
         console.log('✅ Connected to SQL Server');
 
         let queries = [];
-        for (let i = 1000; i <= 10000; i++) {
+        for (let i = 1000; i <= 300000; i++) {
             // Kiểm tra nếu Employee_ID đã tồn tại, bỏ qua
             if (await checkEmployeeExists(pool, i)) {
                 console.log(`⚠️ Employee_ID ${i} đã tồn tại, bỏ qua...`);

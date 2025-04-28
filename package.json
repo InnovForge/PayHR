@@ -8,6 +8,7 @@
     "seed:mysql": "node scripts/seed_mysql_faker.js",
     "seed:sql": "node scripts/sql_c_sv.js",
     "clear:mysql": "node scripts/clear_mysql_data.js",
+    "clear:sql": "node scripts/clear-sql.js",
     "setup": "node scripts/setup.js",
     "format": "prettier --write .",
     "clean": "rimraf ./node_modules/"
